@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_conditional_rendering/conditional.dart';
 //import '../colab/cubit.dart';
 
 Widget defaultButton({
@@ -253,11 +254,16 @@ Widget buildArticleItem(article) => Padding(
       ),
     );
 
-Widget articleBuilder(list) => list.length > 0
-    ? ListView.separated(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => buildArticleItem(list[index]),
-        separatorBuilder: (context, index) => myDivider(),
-        itemCount: 10,
-      )
-    : Center(child: CircularProgressIndicator());
+Widget articleBuilder(list, {context}) {
+  return Conditional.single(
+      context: context,
+      conditionBuilder: (BuildContext context) => list.length > 0,
+      widgetBuilder: (BuildContext context) => ListView.separated(
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, index) => buildArticleItem(list[index]),
+            separatorBuilder: (context, index) => myDivider(),
+            itemCount: list.length,
+          ),
+      fallbackBuilder: (BuildContext context) =>
+          Center(child: CircularProgressIndicator()));
+}
