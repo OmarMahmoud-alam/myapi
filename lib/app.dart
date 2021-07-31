@@ -7,15 +7,23 @@ import 'package:myapi/colab/state.dart';
 class MyMainapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => Newcubit()..getdata2(),
-      child: BlocConsumer<Newcubit, NewsState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          var cubit = Newcubit.get(context);
-          return Scaffold(
+    return BlocConsumer<Newcubit, NewsState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        var cubit = Newcubit.get(context);
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Scaffold(
             appBar: AppBar(
               title: Text('Api Learn'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      cubit.changemode();
+                    },
+                    icon: Icon(Icons.brightness_4_outlined)),
+                IconButton(onPressed: () {}, icon: Icon(Icons.search))
+              ],
             ),
             body: cubit.boddy[cubit.currentindex],
             floatingActionButton: FloatingActionButton(
@@ -23,6 +31,7 @@ class MyMainapp extends StatelessWidget {
               child: Icon(Icons.add),
             ),
             bottomNavigationBar: BottomNavigationBar(
+              // backgroundColor: Colors.black,
               currentIndex: cubit.currentindex,
               onTap: (index) {
                 if (index == 1 && cubit.bussin.length == 0) cubit.getdata();
@@ -31,9 +40,9 @@ class MyMainapp extends StatelessWidget {
               },
               items: cubit.bottomnav,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

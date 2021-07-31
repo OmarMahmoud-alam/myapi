@@ -210,8 +210,10 @@ Widget buildArticleItem(article) => Padding(
                 10.0,
               ),
               image: DecorationImage(
-                image: NetworkImage(
-                    '${article["urlToImage"] ?? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o"} '),
+                // '${article["urlToImage"] == Null ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o" : article["urlToImage"].toString()} '
+                image: NetworkImage(article["urlToImage"] == null
+                    ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o"
+                    : article["urlToImage"].toString()),
                 fit: BoxFit.cover,
               ),
             ),
@@ -266,4 +268,21 @@ Widget articleBuilder(list, {context}) {
           ),
       fallbackBuilder: (BuildContext context) =>
           Center(child: CircularProgressIndicator()));
-}
+} 
+/* Image Loadimage(url)=>
+ Image.network(
+      url,
+      fit: BoxFit.cover,
+      loadingBuilder: (BuildContext ctx, Widget child, ImageChunkEvent loadingProgress) {
+        
+        if (loadingProgress == null) {
+          return child;
+        }else {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            ),
+          );
+        }
+      },       
+  ); */

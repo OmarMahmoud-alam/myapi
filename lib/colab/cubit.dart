@@ -13,6 +13,8 @@ class Newcubit extends Cubit<NewsState> {
   Newcubit() : super(InitNewState());
   static Newcubit get(context) => BlocProvider.of(context);
   var currentindex = 0;
+
+  ThemeMode appmode = ThemeMode.light;
   List<dynamic> sport = [];
   List<dynamic> science = [];
   List<dynamic> bussin = [];
@@ -42,7 +44,9 @@ class Newcubit extends Cubit<NewsState> {
     }).then((value) {
       bussin = value.data['articles'];
       emit(ArticBussinesState());
-      print(bussin.toString());
+      bussin.forEach((element) {
+        print(element['urlToImage']);
+      });
     }).catchError((e) {
       emit(ErrorBussinesState(e: e.toString()));
     });
@@ -57,8 +61,10 @@ class Newcubit extends Cubit<NewsState> {
       'apiKey': 'e391fa4f5e904de09b183731be861079'
     }).then((value) {
       science = value.data['articles'];
+      science.forEach((element) {
+        print(element['urlToImage']);
+      });
       emit(ArticscienceState());
-      print(bussin.toString());
     }).catchError((e) {
       emit(ErrorscienceState(e: e.toString()));
     });
@@ -73,11 +79,21 @@ class Newcubit extends Cubit<NewsState> {
       'apiKey': 'e391fa4f5e904de09b183731be861079'
     }).then((value) {
       sport = value.data['articles'];
+      sport.forEach((element) {
+        print(element['urlToImage']);
+      });
       emit(ArticsportsState());
-      print(bussin.toString());
     }).catchError((e) {
       emit(ErrorsportsState(e: e.toString()));
     });
     //https://newsapi.org/v2/top-headlines?country=eg&category=business&apiKey=e391fa4f5e904de09b183731be861079
+  }
+
+  void changemode() {
+    if (appmode == ThemeMode.dark)
+      appmode = ThemeMode.light;
+    else if (appmode == ThemeMode.light) appmode = ThemeMode.dark;
+    print(appmode.toString());
+    emit(ChangemodeState());
   }
 }

@@ -30,3 +30,5 @@ class ErrorscienceState extends NewsState {
   String? e;
   ErrorscienceState({this.e});
 }
+
+class ChangemodeState extends NewsState {}
