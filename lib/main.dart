@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapi/app.dart';
 import 'package:myapi/colab/state.dart';
@@ -23,6 +24,11 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               theme: ThemeData(
+                  /*appBarTheme:  AppBarTheme(
+                      backwardsCompatibility: false,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarColor: Colors.blueAccent,
+                          statusBarIconBrightness: Brightness.dark)), */
                   iconTheme: IconThemeData(color: Colors.black),
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
                     unselectedItemColor: Colors.grey,

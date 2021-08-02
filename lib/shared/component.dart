@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_conditional_rendering/conditional.dart';
+import 'package:myapi/shared/web_H.dart';
 //import '../colab/cubit.dart';
 
 Widget defaultButton({
@@ -36,12 +37,14 @@ Widget defaultFormField({
   required TextEditingController controller,
   required TextInputType type,
   Function? onSubmit,
-  Function? onChange,
+  InputBorder border = const OutlineInputBorder(),
+  ValueChanged<String>? onChange,
   Function? onTap,
   bool isPassword = false,
   required FormFieldValidator<String> validate,
-  required String label,
-  required IconData prefix,
+  String? label,
+  String? hint,
+  IconData? prefix,
   IconData? suffix,
   Function? suffixPressed,
   bool isClickable = true,
@@ -54,15 +57,14 @@ Widget defaultFormField({
       onFieldSubmitted: (s) {
         onSubmit!(s);
       },
-      onChanged: (s) {
-        onChange!(s);
-      },
+      onChanged: onChange,
       onTap: () {
         onTap!();
       },
       validator: validate,
       decoration: InputDecoration(
-        labelText: label,
+        labelText: label ?? null,
+        hintText: hint ?? null,
         prefixIcon: Icon(
           prefix,
         ),
@@ -76,7 +78,7 @@ Widget defaultFormField({
                 ),
               )
             : null,
-        border: OutlineInputBorder(),
+        border: border,
       ),
     );
 /* 
@@ -198,61 +200,71 @@ Widget myDivider() => Padding(
       ),
     );
 
-Widget buildArticleItem(article) => Padding(
+Widget buildArticleItem(article, context) => Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            width: 120.0,
-            height: 120.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                10.0,
-              ),
-              image: DecorationImage(
-                // '${article["urlToImage"] == Null ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o" : article["urlToImage"].toString()} '
-                image: NetworkImage(article["urlToImage"] == null
-                    ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o"
-                    : article["urlToImage"].toString()),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20.0,
-          ),
-          Expanded(
-            child: Container(
+      child: InkWell(
+        onTap: () {
+          navigateto(
+              context: context,
+              widget: WebSite2(
+                url: article['url'],
+              ));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => W));
+        },
+        child: Row(
+          children: [
+            Container(
+              width: 120.0,
               height: 120.0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${article['title']}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Text(
-                    '${article['publishedAt']}',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+                image: DecorationImage(
+                  // '${article["urlToImage"] == Null ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o" : article["urlToImage"].toString()} '
+                  image: NetworkImage(article["urlToImage"] == null
+                      ? "http://placehold.it/250x250?fbclid=IwAR1KgirYAjPKfQ2YwNbSKzFAz37xbrlQXB2heQA9Oe1zAJLDLLs1npI0d1o"
+                      : article["urlToImage"].toString()),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 15.0,
-          ),
-        ],
+            SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+              child: Container(
+                height: 120.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${article['title']}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${article['publishedAt']}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 15.0,
+            ),
+          ],
+        ),
       ),
     );
 
@@ -262,13 +274,15 @@ Widget articleBuilder(list, {context}) {
       conditionBuilder: (BuildContext context) => list.length > 0,
       widgetBuilder: (BuildContext context) => ListView.separated(
             physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildArticleItem(list[index]),
+            itemBuilder: (context, index) =>
+                buildArticleItem(list[index], context),
             separatorBuilder: (context, index) => myDivider(),
             itemCount: list.length,
           ),
       fallbackBuilder: (BuildContext context) =>
           Center(child: CircularProgressIndicator()));
-} 
+}
+
 /* Image Loadimage(url)=>
  Image.network(
       url,
@@ -286,3 +300,5 @@ Widget articleBuilder(list, {context}) {
         }
       },       
   ); */
+Future<dynamic> navigateto({required context, required Widget widget}) =>
+    Navigator.push(context, MaterialPageRoute(builder: (context) => widget));

@@ -32,3 +32,12 @@ class ErrorscienceState extends NewsState {
 }
 
 class ChangemodeState extends NewsState {}
+
+class ArticSearchState extends NewsState {}
+
+class WaitSearchState extends NewsState {}
+
+class ErrorSearchState extends NewsState {
+  String? e;
+  ErrorSearchState({this.e});
+}

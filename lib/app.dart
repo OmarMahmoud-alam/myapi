@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapi/colab/cubit.dart';
 import 'package:myapi/colab/state.dart';
+import 'package:myapi/layout/search.dart';
+import 'package:myapi/shared/component.dart';
 //import 'package:myapi/shared/dio_H.dart';
 
 class MyMainapp extends StatelessWidget {
@@ -19,10 +21,14 @@ class MyMainapp extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {
+                      navigateto(context: context, widget: Search());
+                    },
+                    icon: Icon(Icons.search)),
+                IconButton(
+                    onPressed: () {
                       cubit.changemode();
                     },
                     icon: Icon(Icons.brightness_4_outlined)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.search))
               ],
             ),
             body: cubit.boddy[cubit.currentindex],

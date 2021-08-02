@@ -38,16 +38,17 @@ class Newcubit extends Cubit<NewsState> {
   void getdata() async {
     emit(WaitBussinesState());
     DioHelper.getData(url: 'v2/top-headlines', query: {
-      'country': 'us',
+      'country': 'eg',
       'category': 'business',
       'apiKey': 'e391fa4f5e904de09b183731be861079'
     }).then((value) {
       bussin = value.data['articles'];
       emit(ArticBussinesState());
       bussin.forEach((element) {
-        print(element['urlToImage']);
+        //   print(element['urlToImage']);
       });
     }).catchError((e) {
+      print(e.toString());
       emit(ErrorBussinesState(e: e.toString()));
     });
     //https://newsapi.org/v2/top-headlines?country=eg&category=business&apiKey=e391fa4f5e904de09b183731be861079
@@ -56,16 +57,17 @@ class Newcubit extends Cubit<NewsState> {
   void getdata2() async {
     emit(WaitscienceState());
     DioHelper.getData(url: 'v2/top-headlines', query: {
-      'country': 'us',
+      'country': 'eg',
       'category': 'science',
       'apiKey': 'e391fa4f5e904de09b183731be861079'
     }).then((value) {
       science = value.data['articles'];
       science.forEach((element) {
-        print(element['urlToImage']);
+        // print(element['urlToImage']);
       });
       emit(ArticscienceState());
     }).catchError((e) {
+      print(e.toString());
       emit(ErrorscienceState(e: e.toString()));
     });
     //https://newsapi.org/v2/top-headlines?country=eg&category=business&apiKey=e391fa4f5e904de09b183731be861079
@@ -80,10 +82,11 @@ class Newcubit extends Cubit<NewsState> {
     }).then((value) {
       sport = value.data['articles'];
       sport.forEach((element) {
-        print(element['urlToImage']);
+        //  print(element['urlToImage']);
       });
       emit(ArticsportsState());
     }).catchError((e) {
+      print(e.toString());
       emit(ErrorsportsState(e: e.toString()));
     });
     //https://newsapi.org/v2/top-headlines?country=eg&category=business&apiKey=e391fa4f5e904de09b183731be861079
@@ -93,7 +96,22 @@ class Newcubit extends Cubit<NewsState> {
     if (appmode == ThemeMode.dark)
       appmode = ThemeMode.light;
     else if (appmode == ThemeMode.light) appmode = ThemeMode.dark;
-    print(appmode.toString());
+    //print(appmode.toString());
     emit(ChangemodeState());
+  }
+
+  List<dynamic> searched = [];
+  void getdatanew(s) {
+    emit(WaitSearchState());
+    DioHelper.getData(
+            url: 'v2/top-headlines',
+            query: {'q': s, 'apiKey': 'e391fa4f5e904de09b183731be861079'})
+        .then((value) {
+      searched = value.data['articles'];
+      emit(ArticSearchState());
+    }).catchError((e) {
+      print(e.toString());
+      emit(ErrorSearchState(e: e.toString()));
+    });
   }
 }
