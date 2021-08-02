@@ -283,22 +283,5 @@ Widget articleBuilder(list, {context}) {
           Center(child: CircularProgressIndicator()));
 }
 
-/* Image Loadimage(url)=>
- Image.network(
-      url,
-      fit: BoxFit.cover,
-      loadingBuilder: (BuildContext ctx, Widget child, ImageChunkEvent loadingProgress) {
-        
-        if (loadingProgress == null) {
-          return child;
-        }else {
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-            ),
-          );
-        }
-      },       
-  ); */
-Future<dynamic> navigateto({required context, required Widget widget}) =>
+Future<dynamic> navigateto({required context, required Widget widget}) async =>
     Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
